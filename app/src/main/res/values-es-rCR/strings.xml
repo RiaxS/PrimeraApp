@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">app</string>
+    <string name="psw_error">Contraseña es requerida</string>
+    <string name="email_error">Correo es requerido</string>
+    <string name="name_error">Nombre es requerido</string>
+
+    <string name="name">Nombre</string>
+    <string name="email">Correo</string>
+    <string name="password">Contraseña</string>
+    <string name="login">Entrar</string>
+    <string name="go_to_register">Ir a Registro</string>
+    <string name="go_to_singIn">Ir a Inicio de Sesión</string>
+    <string name="logged_in">Logueado</string>
+    <string name="no_match">No encontrado</string>
+    <string name="registered">Registrado</string>
+    <string name="register">Registrarse</string>
+    <string name="sing_in">Entrar</string>
+    <string name="Logout">Cerrar Seción</string>
+</resources>

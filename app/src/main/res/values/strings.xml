@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">app</string>
+    <string name="psw_error">Password is required</string>
+    <string name="email_error">Email is required</string>
+    <string name="name_error">Name is required</string>
+
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="go_to_register">Go to Register</string>
+    <string name="go_to_singIn">Go to Sing In</string>
+    <string name="logged_in">Logged</string>
+    <string name="no_match">No match</string>
+    <string name="registered">Registered</string>
+    <string name="register">Register</string>
+    <string name="sing_in">Sing in</string>
+    <string name="Logout">Logout</string>
+</resources>
