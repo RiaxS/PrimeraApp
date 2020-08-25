@@ -19,17 +19,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public static String PREFERENCES ="myapp_preferences";
     private SharedPreferences.Editor editor;
-
-
-
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-        editor =sharedPreferences.edit();
+        sharedPreferences = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
          etEmail = findViewById(R.id.et_email);
          etPassword = findViewById(R.id.et_password);

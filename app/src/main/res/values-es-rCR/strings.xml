@@ -18,4 +18,11 @@
     <string name="register">Registrarse</string>
     <string name="sing_in">Entrar</string>
     <string name="Logout">Cerrar Seción</string>
+
+    <string name="task_name">Nombre de la tarea</string>
+    <string name="add">Agregar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="clean_list">Lista de limpieza</string>
+    <string name="want_to_delete" >Desea eliminar?</string>
+    <string name="yes">Si</string>
 </resources>

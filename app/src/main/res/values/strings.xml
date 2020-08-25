@@ -16,4 +16,12 @@
     <string name="register">Register</string>
     <string name="sing_in">Sing in</string>
     <string name="Logout">Logout</string>
+
+    <string name="task_name">Task name</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="clean_list">Clean list</string>
+    <string name="want_to_delete">Want to delete?</string>
+    <string name="yes">Yes</string>
 </resources>
