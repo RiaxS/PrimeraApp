@@ -2,11 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <item
-        android:id="@+id/logout"
-        android:title="Logout"
-        app:showAsAction="never"
+        android:id="@+id/clean_list"
+        android:title="@string/clean_list"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom"/>
 
-        />
 </menu>

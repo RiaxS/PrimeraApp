@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -26,85 +29,96 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cr.ac.ucr.app.adapters.MainViewPagerAdapter;
+import cr.ac.ucr.app.fragments.ProfileFragment;
+import cr.ac.ucr.app.fragments.ToDoListFragment;
 import cr.ac.ucr.app.utilis.AppPreferences;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-    private ArrayList<String> todosArr;
-    private ArrayAdapter<String> todosAdapter;
-    private ListView lvTodos;
+    private ViewPager vpPager;
+    private BottomNavigationView bottomNavigationView;
+    private MenuItem prevMenuItem;
 
-    private Gson gson;
 
-    private String todosStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences =  getSharedPreferences(LoginActivity.PREFERENCES, MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-
         Toolbar toolbar =findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        gson = new Gson();
+        vpPager = findViewById(R.id.vp_pager);
+        bottomNavigationView = findViewById(R.id.bnv_botton_menu);
+
+        setupViewPagerListener();
+        setupBottomNavViewListener();
+        setupViewPager();
 
 
-        //ListView <---> ArrayAdapter <---> ArrayList
-
-        lvTodos = findViewById(R.id.lv_todos);
-        todosArr = new ArrayList<>();
-
-        String todosStr = AppPreferences.getInstance(this).getString(AppPreferences.Keys.ITEMS);
-        //todos.isEmpty
-        if(!todosStr.equals("")){
-            String[] todosArray = gson.fromJson(todosStr,String[].class);
-            todosArr.addAll(Arrays.asList(todosArray)); //List
-        }
-
-        todosAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, todosArr);
-
-        lvTodos.setAdapter(todosAdapter);
-        //todosArr.add("Hola");
-        //todosArr.add("Mundo");
-
-        setupListViewListener();
+        //setupListViewListener();
     }
 
-    private void setupListViewListener(){
+    public void setupViewPager(){
+        ArrayList<Fragment> fragments = new ArrayList<>();
 
-        final AppCompatActivity activity = this;
-        //AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        lvTodos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+        fragments.add(ToDoListFragment.newInstance());
+        fragments.add(ProfileFragment.newInstance());
+
+        MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), fragments);
+
+        vpPager.setAdapter(mainViewPagerAdapter);
+
+    }
+    public void setupBottomNavViewListener(){
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long id) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.my_task:
+                        vpPager.setCurrentItem(0);
+                        return true;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setMessage(R.string.want_to_delete)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int which) {
-                        todosArr.remove(position);
-                        todosAdapter.notifyDataSetChanged();
-
-                        //todosStr = gson.toJson(todosArr);
-                        //AppPreferences.getInstance(activity).put(AppPreferences.Keys.ITEMS,todosStr);
-                        saveListToPreferences();
-                        }
-                    })
-                        .setNegativeButton(R.string.cancel, null)
-                        .create()
-                        .show();
-
-
-
-                return true;
+                    case R.id.profile:
+                        vpPager.setCurrentItem(1);
+                        return true;
+                    default:
+                }
+                return false;
             }
         });
+
     }
+    public void setupViewPagerListener(){
+        vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                if(prevMenuItem != null){
+                    prevMenuItem.setChecked(false);
+                }
+                bottomNavigationView.getMenu().getItem(position).setChecked(true);
+                prevMenuItem = bottomNavigationView.getMenu().getItem(position);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -120,9 +134,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.logout:
                 logout();
                 return true;
-            case R.id.clean_list:
-                cleanList();
-                return true;
 
 
             default:
@@ -131,16 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void cleanList() {
-        todosArr.clear();
-        todosAdapter.notifyDataSetChanged();
-        saveListToPreferences();
-    }
 
-    private void saveListToPreferences(){
-        todosStr = gson.toJson(todosArr);
-        AppPreferences.getInstance(this).put(AppPreferences.Keys.ITEMS,todosStr);
-    }
+
+
 
     private void logout() {
 
@@ -156,43 +160,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.fab_add_todo:
-                showAlert();
-                break;
-            default:
-                break;
-        }
+
     }
 
-    private void showAlert() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        final View view = inflater.inflate(R.layout.dialog_add_task, null);
 
-        final AppCompatActivity activity = this;
-
-        builder.setView(view)
-                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        TextInputEditText etTaskName = view.findViewById(R.id.et_task_name);
-
-                        String taskName = etTaskName.getText().toString();
-
-                        if(!taskName.isEmpty()){
-                            todosArr.add(taskName);
-                            todosAdapter.notifyDataSetChanged();
-
-                            todosStr = gson.toJson(todosArr);
-                            AppPreferences.getInstance(activity).put(AppPreferences.Keys.ITEMS,todosStr);
-                            dialog.dismiss();
-
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null);
-        builder.create();
-        builder.show();
-    }
 }

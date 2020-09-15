@@ -25,4 +25,7 @@
     <string name="clean_list">Lista de limpieza</string>
     <string name="want_to_delete" >Desea eliminar?</string>
     <string name="yes">Si</string>
+
+    <string name="my_task">Mis Tareas</string>
+    <string name="profile">Perfil</string>
 </resources>
